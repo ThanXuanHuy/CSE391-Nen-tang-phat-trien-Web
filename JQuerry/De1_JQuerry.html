@@ -1,1 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đề 1 - JQuerry</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #fff9f9;
+      }
+      .navbar {
+        background-color: #f2f2f2;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .navbar-left {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .menu a {
+        margin-left: 15px;
+        text-decoration: none;
+        color: #333;
+      }
+      .menu a:hover {
+        color: #b3b6b8;
+      }
+      .navbar-right input {
+        padding: 5px;
+      }
+      .navbar-right button {
+        padding: 6px 10px;
+        color: green;
+        margin-left: 5px;
+        border-color: rgb(41, 216, 41);
+        border-radius: 5px;
+      }
+      .container {
+        padding-top: 20px;
+        background-color: white;
+      }
+      .header-container {
+        background-color: rgb(11, 11, 183);
+        color: white;
+        display: flex;
+        padding: 10px;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .action button {
+        padding: 8px 20px;
+        margin-right: 10px;
+        border: none;
+        border-radius: 4px;
+        color: white;
+      }
+      .delete-btn {
+        background-color: red;
+      }
+      .add-btn {
+        background-color: green;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      table th,
+      table td {
+        border-top: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+      }
+      table tbody tr:hover {
+        background-color: #f1eeee;
+      }
+      table td span {
+        margin-right: 10px;
+      }
+      .pagination {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .pagination span {
+        color: #555;
+      }
+      .pagination button {
+        margin: 3px;
+        padding: 6px 10px;
+        border: none;
+        background-color: white;
+        border-radius: 4px;
+      }
+      .pagination .active-page {
+        background-color: #007bff;
+        color: white;
+        font-weight: bold;
+      }
+      .pagination button:hover {
+        background-color: #007bff;
+        color: white;
+        font-weight: bold;
+      }
+      .page-button {
+        margin-right: 20px;
+      }
+      .modal {
+        display: flex;
+        position: fixed;
+        left: 0;
+        top: 0;
+        display: none;
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+      }
+      .modal-content {
+        background-color: #ffffff;
+        padding: 20px 30px;
+        border-radius: 5px;
+        width: 400px;
+        position: relative;
+      }
+      .modal-content h2 {
+        margin-bottom: 15px;
+      }
+      .modal-content label {
+        display: block;
+        margin: 10px 0 5px;
+      }
+      .modal-content input,
+      .modal-content textarea {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+      }
+      .modal-actions {
+        display: flex;
+        justify-content: end;
+      }
+      .modal-actions button {
+        padding: 8px 16px;
+        border: none;
+        margin-right: 10px;
+      }
+      .modal-actions button[type="submit"] {
+        background-color: rgb(53, 187, 53);
+        color: white;
+      }
+      .close {
+        position: absolute;
+        right: 15px;
+        top: 10px;
+        font-size: 24px;
+        cursor: pointer;
+      }
+      input.error,
+      textarea.error {
+        border-color: red;
+      }
+      label.error {
+        color: red;
+        font-size: 13px;
+        margin-top: 3px;
+        margin-bottom: 5px;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <div class="navbar-left">
+        <span style="font-weight: bold">TLU</span>
+        <nav class="menu">
+          <a href="#">Home</a>
+          <a href="#">Employees</a>
+        </nav>
+      </div>
+      <div class="navbar-right">
+        <input type="text" placeholder="Search" />
+        <button>Search</button>
+      </div>
+    </div>
 
+    <div class="container">
+      <div class="header-container">
+        <h2>Manage <strong>Employees</strong></h2>
+        <div class="action">
+          <button class="delete-btn">Delete</button>
+          <button class="add-btn" onclick="openModal()">
+            Add New Employee
+          </button>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th><input type="checkbox" /></th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="checkbox" /></td>
+            <td>Thomas Hardy</td>
+            <td>thomashardy@mail.com</td>
+            <td>89 Chiaroscuro Rd, Portland, USA</td>
+            <td>(171) 555-2222</td>
+            <td>
+              <span onclick="editRow(this)">✏️</span>
+              <span onclick="deleteRow(this)">🗑️</span>
+            </td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" /></td>
+            <td>Dominique Perrier</td>
+            <td>dominiqueperrier@mail.com</td>
+            <td>Obere Str. 57, Berlin, Germany</td>
+            <td>(313) 555-5735</td>
+            <td>
+              <span onclick="editRow(this)">✏️</span>
+              <span onclick="deleteRow(this)">🗑️</span>
+            </td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" /></td>
+            <td>Maria Anders</td>
+            <td>mariaanders@mail.com</td>
+            <td>25, rue Lauriston, Paris, France</td>
+            <td>(503) 555-9931</td>
+            <td>
+              <span onclick="editRow(this)">✏️</span>
+              <span onclick="deleteRow(this)">🗑️</span>
+            </td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" /></td>
+            <td>Fran Wilson</td>
+            <td>franwilson@mail.com</td>
+            <td>C/ Araquil, 67, Madrid, Spain</td>
+            <td>(204) 619-5731</td>
+            <td>
+              <span onclick="editRow(this)">✏️</span>
+              <span onclick="deleteRow(this)">🗑️</span>
+            </td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" /></td>
+            <td>Martin Blank</td>
+            <td>martinblank@mail.com</td>
+            <td>Via Monte Bianco 34, Turin, Italy</td>
+            <td>(480) 631-2097</td>
+            <td>
+              <span onclick="editRow(this)">✏️</span>
+              <span onclick="deleteRow(this)">🗑️</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination">
+        <span
+          >Showing <strong>5</strong> out of <strong>25</strong> entries</span
+        >
+        <div class="page-button">
+          <button>Previous</button>
+          <button>1</button>
+          <button>2</button>
+          <button class="active-page">3</button>
+          <button>4</button>
+          <button>5</button>
+          <button>Next</button>
+        </div>
+      </div>
+    </div>
+    <div id="employeeModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Add Employee</h2>
+        <form id="employeeForm">
+          <div>
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" />
+          </div>
+
+          <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" />
+          </div>
+
+          <div>
+            <label for="address">Address</label>
+            <textarea id="address" name="address" rows="3" cols="30"></textarea>
+          </div>
+
+          <div>
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="phone" />
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" onclick="closeModal()">Cancel</button>
+            <button type="submit">Add</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      function openModal() {
+        document.getElementById("employeeModal").style.display = "flex";
+      }
+
+      function closeModal() {
+        document.getElementById("employeeModal").style.display = "none";
+        document.getElementById("employeeForm").reset();
+        $("#employeeForm").validate().resetForm();
+        $("#employeeForm input, #employeeForm textarea").removeClass("error");
+      }
+      $.validator.addMethod("phone", function (value, element) {
+            return this.optional(element) || /^0\d{9}$/.test(value);
+        }, "Số điện thoại phải bắt đầu bằng 0 và có đúng 10 chữ số.");
+      $(document).ready(function () {
+        $("#employeeForm").validate({
+          rules: {
+            name: "required",
+            email: {
+              required: true,
+              email: true,
+            },
+            phone: {
+              required: true,
+              digits: true,
+              phone: true,
+            },
+            address: "required",
+          },
+          messages: {
+            name: "Vui lòng nhập tên.",
+            email: {
+              required: "Vui lòng nhập email.",
+              email: "Email không hợp lệ.",
+            },
+            phone: {
+              required: "Vui lòng nhập số điện thoại.",
+              digits: "Chỉ được nhập số.",
+              phone: "Số điện thoại phải bắt đầu bằng 0 và có đúng 10 chữ số.",
+            },
+            address: "Vui lòng nhập thông tin"
+          },
+          errorElement: "label",
+          errorClass: "error",
+          submitHandler: function (form, event) {
+            event.preventDefault();
+            alert("Thêm nhân viên thành công!");
+            closeModal();
+          },
+        });
+      });
+    </script>
+  </body>
+</html>
